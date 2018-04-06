@@ -79,3 +79,17 @@ RUN sudo chown user:user /tmp/init-maven.sh && \
     /tmp/init-maven.sh && \
     sudo rm -f /tmp/init-maven.sh
 
+# Give write access to /home/user for
+# users with an arbitrary UID
+RUN sudo chgrp -R 0 /home/user \
+  && sudo chmod -R g+rwX /home/user \
+  && sudo chgrp -R 0 /etc/passwd \
+  && sudo chmod -R g+rwX /etc/passwd \
+  && sudo chgrp -R 0 /etc/group \
+  && sudo chmod -R g+rwX /etc/group \
+  && sudo mkdir -p /projects \
+  && sudo chgrp -R 0 /projects \
+  && sudo chmod -R g+rwX /projects \
+  && sudo chgrp -R 0 /tmp \
+  && sudo chmod -R g+rwX /tmp
+
