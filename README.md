@@ -4,7 +4,7 @@ This Eclipse Che recipe contains JDK 8, OpenShift CLI and Ansible and also pre-p
 Maven repository with Spring Boot dependencies.
 
 This recipe is available as a docker image on Docker Hub:
-https://hub.docker.com/r/siamaksade/centos_jdk8/
+https://hub.docker.com/r/siamaksade/che_centos_jdk8/
 
 You can find more details in Eclipse Che docs about stacks and recipes:
 https://www.eclipse.org/che/docs/creating-starting-workspaces.html
