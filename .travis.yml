@@ -1,6 +1,6 @@
 env:
   global:
-  - REPO=siamaksade/centos_jdk8
+  - REPO=siamaksade/che_centos_jdk8
 
 sudo: required
 language: python
