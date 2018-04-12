@@ -10,7 +10,8 @@ FROM eclipse/centos_jdk8
 
 ARG OC_VERSION=3.9.14
 
-# Install nss_wrapper and gettext
+
+# Install nss_wrapper and tools
 RUN sudo yum update -y && \
     sudo yum install -y cmake gettext make gcc && \
     cd /home/user/ && \
@@ -24,6 +25,10 @@ RUN sudo yum update -y && \
     sudo yum clean all && \
     sudo rm -rf /tmp/* /var/cache/yum
 
+# Install jq
+RUN sudo yum install -y epel-release && \
+    sudo yum install -y jq
+
 # Install nodejs for ls agents and OpenShift CLI
 RUN sudo yum update -y && \
     curl -sL https://rpm.nodesource.com/setup_6.x | sudo -E bash - && \
@@ -32,8 +37,6 @@ RUN sudo yum update -y && \
     sudo yum remove -y wget && \
     sudo yum clean all && \
     sudo rm -rf /tmp/* /var/cache/yum
-
-RUN sudo yum install -y gettext
 
 # Install Ansible
 RUN sudo yum install -y ansible
