@@ -30,6 +30,20 @@ if ! grep -Fq "${USER_ID}" /etc/passwd; then
     touch ${HOME}/is_arbitrary_user
 fi
 
+function download_lab_solutions() {
+  cd "${HOME}"
+  CURRENT_FOLDER=$(pwd)
+  curl -skL -o master.tar.gz https://github.com/openshift-labs/rhsummit18-cloudnative-labs/archive/master.tar.gz
+  tar xvfz master.tar.gz
+  mv rhsummit18-cloudnative-labs-master/solutions .
+  cat <<'EOF' > $CURRENT_FOLDER/vars.yml
+openshift_master: openshift-master
+gogs_hostname: gogs-hostname
+EOF
+  rm -rf rhsummit18-cloudnative-labs-master master.tar.gz
+}
+
+
 # SSH agent is currently not supported but if we
 # do want to support it we can uncomment the code below
 # and fix SSHAgentLauncher that has SSHD port hardcoded
@@ -43,5 +57,8 @@ fi
 # chmod 700 /home/user/.ssh
 # echo "UsePrivilegeSeparation no" > /home/user/.ssh/sshd_config
 # /usr/sbin/sshd -D -p ${SSHD_PORT} -f /home/user/.ssh/sshd_config &
+
+# Download Lab Solutions
+download_lab_solutions
 
 exec "$@"
