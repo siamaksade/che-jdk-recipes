@@ -37,8 +37,7 @@ function download_lab_solutions() {
   tar xvfz master.tar.gz
   mv rhsummit18-cloudnative-labs-master/solutions .
   cat <<'EOF' > $CURRENT_FOLDER/vars.yml
-openshift_master: https://master-GUID.generic.opentlc.com:8443
-gogs_hostname: gogs-lab-infra.apps-GUID.generic.opentlc.com
+guid: GUID
 EOF
   rm -rf rhsummit18-cloudnative-labs-master master.tar.gz
 }
