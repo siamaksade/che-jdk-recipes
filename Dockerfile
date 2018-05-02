@@ -33,10 +33,12 @@ RUN sudo yum update -y && \
     sudo yum clean all && \
     sudo rm -rf /tmp/* /var/cache/yum
 
-RUN sudo yum install -y gettext
-
 # Install Ansible
 RUN sudo yum install -y ansible
+
+# Install Siege
+RUN sudo yum -y install epel-release && \
+    sudo yum -y install siege
 
 # The following lines are needed to set the correct locale after `yum update`
 # c.f. https://github.com/CentOS/sig-cloud-instance-images/issues/71
