@@ -8,7 +8,7 @@
 
 FROM eclipse/centos_jdk8
 
-ARG OC_VERSION=3.9.14
+ARG OC_VERSION=3.9.31
 
 
 # Install nss_wrapper and tools
