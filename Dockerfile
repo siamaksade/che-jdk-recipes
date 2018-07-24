@@ -10,7 +10,6 @@ FROM eclipse/centos_jdk8
 
 ARG OC_VERSION=3.9.31
 
-
 # Install nss_wrapper and tools
 RUN sudo yum update -y && \
     sudo yum install -y cmake gettext make gcc && \
@@ -67,6 +66,9 @@ RUN cat /etc/passwd | \
 RUN cat /etc/group | \
     sed s#root:x:0:#root:x:0:0,\${USER_ID}:#g \
     > /home/user/group.template
+
+RUN sed -i '/MAVEN_OPTS/d' /home/user/.bashrc && \
+    echo "export MAVEN_OPTS=\"\$MAVEN_OPTS \$JAVA_OPTS\"" >> /home/user/.bashrc
 
 ENV HOME /home/user
 
