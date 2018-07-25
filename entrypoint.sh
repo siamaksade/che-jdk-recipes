@@ -30,6 +30,24 @@ configure_mirrors() {
   fi
 }
 
+function download_projects() {
+  if [ -n "$DOWNLOAD_ARCHIVE_URL" ]; then
+    cd "${HOME}"
+
+    if [[ $DOWNLOAD_ARCHIVE_URL =~ \.gz$ ]]; then
+      curl -skL -o projects.tar.gz $DOWNLOAD_ARCHIVE_URL
+      tar xvfz projects.tar.gz
+      rm -rf projects.tar.gz
+
+    elif [[ $DOWNLOAD_ARCHIVE_URL =~ \.zip$ ]]; then
+      curl -skL -o projects.zip $DOWNLOAD_ARCHIVE_URL
+      unzip projects.zip
+      rm -rf projects.zip
+    fi
+  fi
+}
+
 configure_mirrors
+download_projects
 
 exec "$@"

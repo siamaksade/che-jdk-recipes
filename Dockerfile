@@ -3,8 +3,8 @@
 # are made available under the terms of the Eclipse Public License v1.0
 # which accompanies this distribution, and is available at
 # http://www.eclipse.org/legal/epl-v10.html
-# Contributors:
-# Red Hat, Inc. - initial implementation
+#
+# Contributors: Siamak Sadeghianfar siamak@redhat.com
 
 FROM eclipse/centos_jdk8
 
@@ -40,10 +40,17 @@ RUN sudo yum update -y && \
 # Install Ansible
 RUN sudo yum install -y ansible
 
+# Install Siege
+RUN sudo yum -y install epel-release && \
+    sudo yum -y install siege
+
 # The following lines are needed to set the correct locale after `yum update`
 # c.f. https://github.com/CentOS/sig-cloud-instance-images/issues/71
 RUN sudo localedef -i en_US -f UTF-8 C.UTF-8
 ENV LANG="C.UTF-8"
+
+# Maven settings
+COPY ./settings.xml $HOME/.m2/settings.xml
 
 # Give write access to /home/user for 
 # users with an arbitrary UID 
