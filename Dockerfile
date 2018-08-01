@@ -8,7 +8,7 @@
 
 FROM eclipse/centos_jdk8
 
-ARG OC_VERSION=3.9.31
+ARG OC_VERSION=3.10.14
 
 # Install nss_wrapper and gettext
 RUN sudo yum update -y && \
