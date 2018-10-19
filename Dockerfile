@@ -44,6 +44,10 @@ RUN sudo yum install -y ansible
 RUN sudo yum -y install epel-release && \
     sudo yum -y install siege
 
+
+# Install Yarn
+RUN sudo yum install -y yarn
+
 # The following lines are needed to set the correct locale after `yum update`
 # c.f. https://github.com/CentOS/sig-cloud-instance-images/issues/71
 RUN sudo localedef -i en_US -f UTF-8 C.UTF-8
