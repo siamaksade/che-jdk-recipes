@@ -1,14 +1,14 @@
-# Copyright (c) 2012-2017 Red Hat, Inc.
+# Copyright (c) 2012-2018 Red Hat, Inc.
 # All rights reserved. This program and the accompanying materials
 # are made available under the terms of the Eclipse Public License v1.0
 # which accompanies this distribution, and is available at
 # http://www.eclipse.org/legal/epl-v10.html
 #
-# Contributors: Siamak Sadeghianfar siamak@redhat.com
+# Contributors: Madou Coulibaly mcouliba@redhat.com
 
 FROM eclipse/centos_jdk8
 
-ARG OC_VERSION=3.10.14
+ARG OC_VERSION=3.11.16
 
 # Install nss_wrapper and tools
 RUN sudo yum update -y && \
@@ -30,7 +30,7 @@ RUN sudo yum install -y epel-release && \
 
 # Install nodejs for ls agents and OpenShift CLI
 RUN sudo yum update -y && \
-    curl -sL https://rpm.nodesource.com/setup_6.x | sudo -E bash - && \
+    curl -sL https://rpm.nodesource.com/setup_8.x | sudo -E bash - && \
     sudo yum install -y bzip2 tar curl wget nodejs && \
     sudo wget -qO- "https://mirror.openshift.com/pub/openshift-v3/clients/${OC_VERSION}/linux/oc.tar.gz" | sudo tar xvz -C /usr/local/bin && \
     sudo yum remove -y wget && \
@@ -44,9 +44,14 @@ RUN sudo yum install -y ansible
 RUN sudo yum -y install epel-release && \
     sudo yum -y install siege
 
-
 # Install Yarn
+RUN sudo yum update -y && \
+    curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo
 RUN sudo yum install -y yarn
+
+# Install Openshift DO (ODO)
+RUN sudo curl -L https://github.com/redhat-developer/odo/releases/download/v0.0.13/odo-linux-amd64 -o /usr/local/bin/odo && \
+    sudo chmod +x /usr/local/bin/odo
 
 # The following lines are needed to set the correct locale after `yum update`
 # c.f. https://github.com/CentOS/sig-cloud-instance-images/issues/71
