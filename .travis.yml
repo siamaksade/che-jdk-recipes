@@ -1,6 +1,6 @@
 env:
   global:
-  - REPO=siamaksade/che-centos-jdk8
+  - REPO=mcouliba/che-cloud-native
 
 sudo: required
 language: python
