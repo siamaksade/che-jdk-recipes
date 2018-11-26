@@ -9,6 +9,7 @@
 FROM eclipse/centos_jdk8
 
 ARG OC_VERSION=3.11.16
+ARG ODO_VERSION=v0.0.16
 
 # Install nss_wrapper and tools
 RUN sudo yum update -y && \
@@ -50,7 +51,7 @@ RUN sudo yum update -y && \
 RUN sudo yum install -y yarn
 
 # Install Openshift DO (ODO)
-RUN sudo curl -L https://github.com/redhat-developer/odo/releases/download/v0.0.13/odo-linux-amd64 -o /usr/local/bin/odo && \
+RUN sudo curl -L https://github.com/redhat-developer/odo/releases/download/${ODO_VERSION}/odo-linux-amd64 -o /usr/local/bin/odo && \
     sudo chmod +x /usr/local/bin/odo
 
 # The following lines are needed to set the correct locale after `yum update`
