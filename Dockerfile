@@ -8,8 +8,8 @@
 
 FROM eclipse/centos_jdk8
 
-ARG OC_VERSION=3.11.16
-ARG ODO_VERSION=v0.0.16
+ARG OC_VERSION=3.11.43
+ARG ODO_VERSION=v0.0.17
 
 # Install nss_wrapper and tools
 RUN sudo yum update -y && \
