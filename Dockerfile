@@ -6,27 +6,31 @@
 #
 # Contributors: Madou Coulibaly mcouliba@redhat.com
 
-FROM eclipse/centos_jdk8
+FROM registry.access.redhat.com/codeready-workspaces-beta/stacks-java:latest
+
+EXPOSE 4403 8080 8000 9876 22
+LABEL che:server:8080:ref=tomcat8 che:server:8080:protocol=http che:server:8000:ref=tomcat8-debug che:server:8000:protocol=http che:server:9876:ref=codeserver che:server:9876:protocol=http
 
 ARG OC_VERSION=3.11.43
-ARG ODO_VERSION=v0.0.17
+ARG ODO_VERSION=v0.0.18
 
 # Install nss_wrapper and tools
 RUN sudo yum update -y && \
-    sudo yum install -y cmake gettext make gcc && \
-    cd /home/user/ && \
+    sudo yum install -y cmake gettext make gcc
+    
+RUN cd && \
     git clone git://git.samba.org/nss_wrapper.git && \
     cd nss_wrapper && \
     mkdir obj && cd obj && \
     cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DLIB_SUFFIX=64 .. && \
     make && sudo make install && \
-    cd /home/user && rm -rf ./nss_wrapper && \
+    cd && rm -rf ./nss_wrapper && \
     sudo yum remove -y cmake make gcc && \
     sudo yum clean all && \
     sudo rm -rf /tmp/* /var/cache/yum
 
 # Install jq
-RUN sudo yum install -y epel-release && \
+RUN sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
     sudo yum install -y jq
 
 # Install nodejs for ls agents and OpenShift CLI
@@ -62,32 +66,13 @@ ENV LANG="C.UTF-8"
 # Maven settings
 COPY ./settings.xml $HOME/.m2/settings.xml
 
-# Give write access to /home/user for 
-# users with an arbitrary UID 
-RUN sudo chgrp -R 0 /home/user \
-  && sudo chmod -R g+rwX /home/user \
-  && sudo chgrp -R 0 /etc/passwd \
-  && sudo chmod -R g+rwX /etc/passwd \
-  && sudo chgrp -R 0 /etc/group \
-  && sudo chmod -R g+rwX /etc/group \
-  && sudo mkdir -p /projects \
+# Give write access to /projects 
+RUN sudo mkdir -p /projects \
   && sudo chgrp -R 0 /projects \
   && sudo chmod -R g+rwX /projects
   
-# Generate passwd.template
-RUN cat /etc/passwd | \
-    sed s#user:x.*#user:x:\${USER_ID}:\${GROUP_ID}::\${HOME}:/bin/bash#g \
-    > /home/user/passwd.template
-
-# Generate group.template
-RUN cat /etc/group | \
-    sed s#root:x:0:#root:x:0:0,\${USER_ID}:#g \
-    > /home/user/group.template
-
-RUN sed -i '/MAVEN_OPTS/d' /home/user/.bashrc && \
-    echo "export MAVEN_OPTS=\"\$MAVEN_OPTS \$JAVA_OPTS\"" >> /home/user/.bashrc
-
-ENV HOME /home/user
+RUN sed -i '/MAVEN_OPTS/d' ~/.bashrc && \
+    echo "export MAVEN_OPTS=\"\$MAVEN_OPTS \$JAVA_OPTS\"" >> ~/.bashrc
 
 # Overwride entrypoint
 COPY ["entrypoint.sh","/home/user/entrypoint.sh"]
