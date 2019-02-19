@@ -1,6 +1,6 @@
-# Eclipse Che Cloud Native Recipe 
+# CodeReady Workspaces Cloud Native Recipe 
 
-This Eclipse Che recipe contains JDK 8, OpenShift CLI, Openshift DO and Ansible.
+This CodeReady recipe contains JDK 8, OpenShift CLI, Openshift DO and Ansible.
 
 This recipe is available as a docker image on Docker Hub:
 https://hub.docker.com/r/mcouliba/che-cloud-native/
