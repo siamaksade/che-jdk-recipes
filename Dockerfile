@@ -39,9 +39,9 @@ ARG SQUASHCTL_VERSION=v0.4.4
 RUN sudo wget -qO- "https://mirror.openshift.com/pub/openshift-v3/clients/${OC_VERSION}/linux/oc.tar.gz" | sudo tar xvz -C /usr/local/bin && \
     oc version
 
-# # Install nodejs for ls agents
-# RUN curl -sL https://rpm.nodesource.com/setup_8.x | sudo -E bash - && \
-#     sudo yum install -y nodejs
+# Install nodejs for ls agents
+RUN curl -sL https://rpm.nodesource.com/setup_8.x | sudo -E bash - && \
+    sudo yum install -y nodejs
 
 # Install Ansible
 RUN sudo yum install -y ansible
