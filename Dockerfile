@@ -9,9 +9,7 @@
 FROM eclipse/centos_jdk8
 
 ARG OC_VERSION=3.11.43
-ARG ODO_VERSION=v0.0.20
-ARG KUBECTL_VERSION=v1.13.3
-ARG SQUASHCTL_VERSION=v0.4.4
+ARG ODO_VERSION=v0.0.19
 
 # Install nss_wrapper and tools
 RUN sudo yum update -y && \
@@ -31,42 +29,31 @@ RUN sudo yum update -y && \
 RUN sudo yum install -y epel-release && \
     sudo yum install -y jq
 
-# Install tools
+# Install nodejs for ls agents and OpenShift CLI
 RUN sudo yum update -y && \
-    sudo yum install -y bzip2 tar curl
-
-# Install oc
-RUN sudo wget -qO- "https://mirror.openshift.com/pub/openshift-v3/clients/${OC_VERSION}/linux/oc.tar.gz" | sudo tar xvz -C /usr/local/bin && \
-    oc version
-
-# Install nodejs for ls agents
-RUN curl -sL https://rpm.nodesource.com/setup_8.x | sudo -E bash - && \
-    sudo yum install -y nodejs
+    curl -sL https://rpm.nodesource.com/setup_8.x | sudo -E bash - && \
+    sudo yum install -y bzip2 tar curl wget nodejs && \
+    sudo wget -qO- "https://mirror.openshift.com/pub/openshift-v3/clients/${OC_VERSION}/linux/oc.tar.gz" | sudo tar xvz -C /usr/local/bin && \
+    sudo yum remove -y wget && \
+    sudo yum clean all && \
+    sudo rm -rf /tmp/* /var/cache/yum
 
 # Install Ansible
 RUN sudo yum install -y ansible
 
 # Install Siege
-RUN sudo yum install -y epel-release && \
-    sudo yum install -y siege
+RUN sudo yum -y install epel-release && \
+    sudo yum -y install siege
+
+# Install Yarn
+RUN sudo yum update -y && \
+    curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo
+RUN sudo yum install -y yarn
 
 # Install Openshift DO (ODO)
 RUN sudo curl -L https://github.com/redhat-developer/odo/releases/download/${ODO_VERSION}/odo-linux-amd64 -o /usr/local/bin/odo && \
     sudo chmod +x /usr/local/bin/odo
 
-# Install kubectl
-ADD https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl /usr/local/bin/kubectl
-RUN sudo chmod +x /usr/local/bin/kubectl && \
-    kubectl version --client
-
-# Install squashctl 
-RUN sudo wget -qO /usr/local/bin/squashctl https://github.com/solo-io/squash/releases/download/${SQUASHCTL_VERSION}/squashctl-linux && \
-    sudo chmod +x /usr/local/bin/squashctl
-
-# Cleanup 
-RUN sudo yum clean all && \
-    sudo rm -rf /tmp/* /var/cache/yum
-    
 # The following lines are needed to set the correct locale after `yum update`
 # c.f. https://github.com/CentOS/sig-cloud-instance-images/issues/71
 RUN sudo localedef -i en_US -f UTF-8 C.UTF-8
