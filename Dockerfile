@@ -13,27 +13,27 @@ ARG ODO_VERSION=v0.0.20
 ARG KUBECTL_VERSION=v1.13.3
 ARG SQUASHCTL_VERSION=v0.4.4
 
-# # Install nss_wrapper and tools
-# RUN sudo yum update -y && \
-#     sudo yum install -y cmake gettext make gcc && \
-#     cd /home/user/ && \
-#     git clone git://git.samba.org/nss_wrapper.git && \
-#     cd nss_wrapper && \
-#     mkdir obj && cd obj && \
-#     cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DLIB_SUFFIX=64 .. && \
-#     make && sudo make install && \
-#     cd /home/user && rm -rf ./nss_wrapper && \
-#     sudo yum remove -y cmake make gcc && \
-#     sudo yum clean all && \
-#     sudo rm -rf /tmp/* /var/cache/yum
+# Install nss_wrapper and tools
+RUN sudo yum update -y && \
+    sudo yum install -y cmake gettext make gcc && \
+    cd /home/user/ && \
+    git clone git://git.samba.org/nss_wrapper.git && \
+    cd nss_wrapper && \
+    mkdir obj && cd obj && \
+    cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DLIB_SUFFIX=64 .. && \
+    make && sudo make install && \
+    cd /home/user && rm -rf ./nss_wrapper && \
+    sudo yum remove -y cmake make gcc && \
+    sudo yum clean all && \
+    sudo rm -rf /tmp/* /var/cache/yum
 
-# # Install jq
-# RUN sudo yum install -y epel-release && \
-#     sudo yum install -y jq
+# Install jq
+RUN sudo yum install -y epel-release && \
+    sudo yum install -y jq
 
-# # Install tools
-# RUN sudo yum update -y && \
-#     sudo yum install -y bzip2 tar curl wget
+# Install tools
+RUN sudo yum update -y && \
+    sudo yum install -y bzip2 tar curl
 
 # Install oc
 RUN sudo wget -qO- "https://mirror.openshift.com/pub/openshift-v3/clients/${OC_VERSION}/linux/oc.tar.gz" | sudo tar xvz -C /usr/local/bin && \
@@ -75,32 +75,32 @@ ENV LANG="C.UTF-8"
 # Maven settings
 COPY ./settings.xml $HOME/.m2/settings.xml
 
-# # Give write access to /home/user for 
-# # users with an arbitrary UID 
-# RUN sudo chgrp -R 0 /home/user \
-#   && sudo chmod -R g+rwX /home/user \
-#   && sudo chgrp -R 0 /etc/passwd \
-#   && sudo chmod -R g+rwX /etc/passwd \
-#   && sudo chgrp -R 0 /etc/group \
-#   && sudo chmod -R g+rwX /etc/group \
-#   && sudo mkdir -p /projects \
-#   && sudo chgrp -R 0 /projects \
-#   && sudo chmod -R g+rwX /projects
+# Give write access to /home/user for 
+# users with an arbitrary UID 
+RUN sudo chgrp -R 0 /home/user \
+  && sudo chmod -R g+rwX /home/user \
+  && sudo chgrp -R 0 /etc/passwd \
+  && sudo chmod -R g+rwX /etc/passwd \
+  && sudo chgrp -R 0 /etc/group \
+  && sudo chmod -R g+rwX /etc/group \
+  && sudo mkdir -p /projects \
+  && sudo chgrp -R 0 /projects \
+  && sudo chmod -R g+rwX /projects
   
-# # Generate passwd.template
-# RUN cat /etc/passwd | \
-#     sed s#user:x.*#user:x:\${USER_ID}:\${GROUP_ID}::\${HOME}:/bin/bash#g \
-#     > /home/user/passwd.template
+# Generate passwd.template
+RUN cat /etc/passwd | \
+    sed s#user:x.*#user:x:\${USER_ID}:\${GROUP_ID}::\${HOME}:/bin/bash#g \
+    > /home/user/passwd.template
 
-# # Generate group.template
-# RUN cat /etc/group | \
-#     sed s#root:x:0:#root:x:0:0,\${USER_ID}:#g \
-#     > /home/user/group.template
+# Generate group.template
+RUN cat /etc/group | \
+    sed s#root:x:0:#root:x:0:0,\${USER_ID}:#g \
+    > /home/user/group.template
 
 RUN sed -i '/MAVEN_OPTS/d' /home/user/.bashrc && \
     echo "export MAVEN_OPTS=\"\$MAVEN_OPTS \$JAVA_OPTS\"" >> /home/user/.bashrc
 
-# ENV HOME /home/user
+ENV HOME /home/user
 
 # Overwride entrypoint
 COPY ["entrypoint.sh","/home/user/entrypoint.sh"]
