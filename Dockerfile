@@ -49,7 +49,8 @@ RUN curl -sL https://rpm.nodesource.com/setup_8.x | sudo -E bash - && \
 RUN sudo yum install -y ansible
 
 # Install Siege
-RUN sudo yum install -y siege
+RUN sudo yum install -y epel-release && \
+    sudo yum install -y siege
 
 # Install Openshift DO (ODO)
 RUN sudo curl -L https://github.com/redhat-developer/odo/releases/download/${ODO_VERSION}/odo-linux-amd64 -o /usr/local/bin/odo && \
