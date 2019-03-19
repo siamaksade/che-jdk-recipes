@@ -78,7 +78,7 @@ ENV GRAALVM_HOME=/home/user/graalvm
 ENV PATH=${GRAALVM_HOME}/bin:${PATH}
 RUN mkdir ${GRAALVM_HOME} && \
     sudo wget -qO- https://github.com/oracle/graal/releases/download/vm-${GRAALVM_VERSION}/graalvm-ce-${GRAALVM_VERSION}-linux-amd64.tar.gz | tar -zx --strip-components=1 -C ${GRAALVM_HOME} && \
-    sudo yum install -y gcc
+    sudo yum install -y zlib-devel gcc
 
 # Cleanup 
 RUN sudo yum clean all && \
