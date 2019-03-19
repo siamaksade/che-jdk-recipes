@@ -15,8 +15,12 @@ ARG KUBECTL_VERSION=v1.13.3
 ARG SQUASHCTL_VERSION=v0.4.4
 ARG GRAALVM_VERSION=1.0.0-rc13
 
+ENV PATH=${JAVA_HOME}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
 # Maven 3.5.x
-run sudo yum install -y centos-release-scl rh-maven35 && \
+ENV M2_HOME=/opt/rh/rh-maven35/root/usr/share/maven
+ENV PATH=${M2_HOME}/bin:${PATH}
+RUN sudo yum install -y centos-release-scl rh-maven35 && \
     scl enable rh-maven35 bash
 
 # Install EPEL
@@ -71,10 +75,9 @@ RUN sudo chmod +x /usr/local/bin/kubectl && \
 
 # Install GraalVM
 ENV GRAALVM_HOME=/home/user/graalvm
-
+ENV PATH=${GRAALVM_HOME}/bin:${PATH}
 RUN mkdir ${GRAALVM_HOME} && \
     sudo wget -qO- https://github.com/oracle/graal/releases/download/vm-${GRAALVM_VERSION}/graalvm-ce-${GRAALVM_VERSION}-linux-amd64.tar.gz | tar -zx --strip-components=1 -C ${GRAALVM_HOME}
-ENV PATH=${GRAALVM_HOME}/bin:${PATH}
 
 # Cleanup 
 RUN sudo yum clean all && \
