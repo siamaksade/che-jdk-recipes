@@ -6,8 +6,9 @@
 #
 # Contributors: Madou Coulibaly mcouliba@redhat.com
 
-FROM registry.centos.org/che-stacks/centos-jdk8
-EXPOSE 4403 8080 8000 22
+FROM eclipse/centos_jdk8
+# FROM registry.centos.org/che-stacks/centos-jdk8
+# EXPOSE 4403 8080 8000 22
 
 ARG OC_VERSION=3.11.43
 ARG ODO_VERSION=v0.0.20
@@ -15,13 +16,13 @@ ARG KUBECTL_VERSION=v1.13.3
 ARG SQUASHCTL_VERSION=v0.5.7
 ARG GRAALVM_VERSION=1.0.0-rc13
 
-ENV PATH=${JAVA_HOME}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# ENV PATH=${JAVA_HOME}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-# Maven 3.5.x
-ENV MVN_HOME=/opt/rh/rh-maven35/root/usr/share/maven
-ENV PATH=${MVN_HOME}/bin:${PATH}
-RUN sudo yum install -y centos-release-scl rh-maven35 && \
-    scl enable rh-maven35 bash
+# # Maven 3.5.x
+# ENV MVN_HOME=/opt/rh/rh-maven35/root/usr/share/maven
+# ENV PATH=${MVN_HOME}/bin:${PATH}
+# RUN sudo yum install -y centos-release-scl rh-maven35 && \
+#     scl enable rh-maven35 bash
 
 # Install EPEL
 RUN sudo yum update -y && \
