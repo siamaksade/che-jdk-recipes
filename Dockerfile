@@ -18,8 +18,8 @@ ARG GRAALVM_VERSION=1.0.0-rc13
 ENV PATH=${JAVA_HOME}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # Maven 3.5.x
-ENV M2_HOME=/opt/rh/rh-maven35/root/usr/share/maven
-ENV PATH=${M2_HOME}/bin:${PATH}
+ENV MVN_HOME=/opt/rh/rh-maven35/root/usr/share/maven
+ENV PATH=${MVN_HOME}/bin:${PATH}
 RUN sudo yum install -y centos-release-scl rh-maven35 && \
     scl enable rh-maven35 bash
 
