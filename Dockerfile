@@ -13,7 +13,7 @@ FROM eclipse/centos_jdk8
 ARG OC_VERSION=3.11.43
 ARG ODO_VERSION=v0.0.20
 ARG KUBECTL_VERSION=v1.13.3
-ARG SQUASHCTL_VERSION=v0.5.8
+ARG SQUASHCTL_VERSION=v0.5.12
 ARG GRAALVM_VERSION=1.0.0-rc13
 
 # ENV PATH=${JAVA_HOME}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
