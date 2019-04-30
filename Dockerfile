@@ -25,7 +25,7 @@ ARG GRAALVM_VERSION=1.0.0-rc13
 #     scl enable rh-maven35 bash
 
 # Install Development Tools
-RUN sudo yum group install "Development Tools"
+RUN sudo yum group install -y "Development Tools"
 
 # Install EPEL
 RUN sudo yum update -y && \
