@@ -84,6 +84,10 @@ RUN mkdir ${GRAALVM_HOME} && \
     sudo wget -qO- https://github.com/oracle/graal/releases/download/vm-${GRAALVM_VERSION}/graalvm-ce-${GRAALVM_VERSION}-linux-amd64.tar.gz | tar -zx --strip-components=1 -C ${GRAALVM_HOME} && \
     sudo yum install -y zlib-devel gcc
 
+# Install Golang
+RUN sudo wget -qO- https://storage.googleapis.com/golang/go1.12.4.linux-amd64.tar.gz | sudo tar xvz -C /usr/local/bin && \
+    go version
+
 # Cleanup 
 RUN sudo yum clean all && \
     sudo rm -rf /tmp/* /var/cache/yum
