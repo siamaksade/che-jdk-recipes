@@ -90,9 +90,9 @@ ENV GOPATH /go
 ENV GOROOT /usr/local/go
 ENV PATH $GOPATH/bin:$GOROOT/bin:$PATH
 RUN sudo wget -qO- https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz | sudo tar xvz -C /usr/local && \
-    sudo mkdir -p "$GOPATH/{bin,src,pkg}" && sudo chmod -R 777 "$GOPATH" && \
+    sudo mkdir -p $GOPATH/{bin,src,pkg} && sudo chmod -R 777 "$GOPATH" && \
     go version
-    
+
 # Cleanup 
 RUN sudo yum clean all && \
     sudo rm -rf /tmp/* /var/cache/yum
