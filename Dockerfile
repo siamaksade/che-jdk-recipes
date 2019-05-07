@@ -15,6 +15,7 @@ ARG ODO_VERSION=v0.0.20
 ARG KUBECTL_VERSION=v1.13.3
 ARG SQUASHCTL_VERSION=v0.5.12
 ARG GRAALVM_VERSION=1.0.0-rc13
+ARG GO_VERSION=1.12.4
 
 # ENV PATH=${JAVA_HOME}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
@@ -23,7 +24,7 @@ ARG GRAALVM_VERSION=1.0.0-rc13
 # ENV PATH=${MVN_HOME}/bin:${PATH}
 # RUN sudo yum install -y centos-release-scl rh-maven35 && \
 #     scl enable rh-maven35 bash
-
+    
 # Install Development Tools
 RUN sudo yum group install -y "Development Tools"
 
@@ -85,9 +86,13 @@ RUN mkdir ${GRAALVM_HOME} && \
     sudo yum install -y zlib-devel gcc
 
 # Install Golang
-RUN sudo wget -qO- https://storage.googleapis.com/golang/go1.12.4.linux-amd64.tar.gz | sudo tar xvz -C /usr/local/bin && \
+ENV GOPATH /go
+ENV GOROOT /usr/local/go
+ENV PATH $GOPATH/bin:$GOROOT/bin:$PATH
+RUN sudo wget -qO- https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz | sudo tar xvz -C /usr/local && \
+    sudo mkdir -p "$GOPATH/{bin,src,pkg}" && sudo chmod -R 777 "$GOPATH" && \
     go version
-
+    
 # Cleanup 
 RUN sudo yum clean all && \
     sudo rm -rf /tmp/* /var/cache/yum
